@@ -27,7 +27,7 @@ class CNN_model:
                 embedding = self.class_embedding_table[train_y[j]]
                 encoded_y.append(lsh.indexing(embedding))
             dummy_y = np_utils.to_categorical(encoded_y, num_classes= self.output_dim**2)
-            model.fit(train_X, dummy_y, batch_size=32, epochs=3)
+            model.fit(train_X, dummy_y, batch_size=32, epochs=5)
 
     def predict_top_K(self, test_X, K):
         predictions = []

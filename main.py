@@ -29,7 +29,7 @@ assert c == 51
 input_shape = (128,128,3)
 embedding_dim = 85
 output_dim = 4
-num_models = 10
+num_models = 20
 top_K = 5
 
 model = mymodel.CNN_model(input_shape, embedding_dim, output_dim, num_models, class_embedding_table)
