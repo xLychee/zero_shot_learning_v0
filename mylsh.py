@@ -16,6 +16,7 @@ class LSH:
             else:
                 result = result * 2 + 0
         assert result >= 0 and result < 2**len(self.planes)
+        return result
 '''
 class LSH_family:
     def __init__(self, input_dim, output_dim, num_table):
