@@ -33,7 +33,7 @@ num_models = 10
 
 model = mymodel.CNN_model(input_shape, embedding_dim, output_dim, num_models, class_embedding_table)
 model.train(train_X, train_y)
-prediction = model.predict_top_K(test_X)
+prediction = model.predict_top_K(test_X, 5)
 for i in range(test_X.shape[0]):
     if test_y[i] in set(prediction[i]):
         print("hit")

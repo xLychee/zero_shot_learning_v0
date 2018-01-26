@@ -85,6 +85,8 @@ class CNN_model:
         model.add(Dropout(0.5))
         model.add(Dense(output_length, activation='softmax'))
         model.compile(loss='categorical_crossentropy', optimizer='adam', metrics=['accuracy'])
+        model._make_predict_function()
+        model._make_train_function()
         return model
 
 
