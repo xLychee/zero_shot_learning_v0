@@ -15,13 +15,16 @@ unseen_X = np.load('/home/xunluan/zero_shot/datasets/awa/unseen_X.npy')
 unseen_y = np.load('/home/xunluan/zero_shot/datasets/awa/unseen_y.npy')
 
 class_embedding_table = {}
-file = open('/home/xunluan/zero_shot/datasets/awa/Animals_with_Attributes2/predicate-matrix-binary.txt')
+#file = open('/home/xunluan/zero_shot/datasets/awa/Animals_with_Attributes2/predicate-matrix-binary.txt')
+file = open('/home/xunluan/zero_shot/datasets/awa/Animals_with_Attributes2/predicate-matrix-continuous.txt')
 c = 1
 for line in file.readlines():
     embedding = []
     for i in line.split():
         embedding.append(float(i))
     embedding = np.array(embedding)
+    embedding = (embedding-50)/50
+    print("class {}, embedding: {}".format(c, embedding))
     class_embedding_table[c] = embedding
     c+=1
 assert c == 51
