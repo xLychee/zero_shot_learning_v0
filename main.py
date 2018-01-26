@@ -30,12 +30,13 @@ input_shape = (128,128,3)
 embedding_dim = 85
 output_dim = 4
 num_models = 3
+top_K = 5
 
 model = mymodel.CNN_model(input_shape, embedding_dim, output_dim, num_models, class_embedding_table)
 model.train(train_X, train_y)
-prediction = model.predict_top_K(test_X, 5)
+prediction = model.predict_top_K(test_X, top_K)
+num_hit = 0
 for i in range(test_X.shape[0]):
     if test_y[i] in set(prediction[i]):
-        print("hit")
-    else:
-        print("miss")
+        num_hit+=1
+print("Test set. Top {} hit rate: {}/{} = {}".format(top_K, num_hit, test_X.shape[0], num_hit/test_X.shape[0]))
