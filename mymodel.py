@@ -19,7 +19,7 @@ class CNN_model:
 
     def train(self, train_X, train_y):
         for i in range(self.num_models):
-            print("Training for model {}. ".format(i+1))
+            print("Training for model {} / {}".format(i+1,self.num_models))
             lsh = self.lshs[i]
             model = self.models[i]
             encoded_y = []
@@ -40,7 +40,7 @@ class CNN_model:
             for j in range(self.num_models):
                 p.append(predictions[j][i])
             class_value_table = {}
-            for c in self.class_embedding_table.indexs():
+            for c in self.class_embedding_table.keys():
                 embedding = self.class_embedding_table[c]
                 value = 0
                 for j in range(self.num_models):
