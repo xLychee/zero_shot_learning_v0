@@ -22,7 +22,6 @@ for line in file.readlines():
     for i in line.split():
         embedding.append(float(i))
     embedding = np.array(embedding)
-    embedding =
     class_embedding_table[c] = embedding
     c+=1
 assert c == 51
