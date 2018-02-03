@@ -21,7 +21,7 @@ for i in range(len(netIDs)):
 
 input_dim = 2048
 num_planes = 5
-num_models = 2
+num_models = 10
 embedding_dim = 500
 
 model = model_imagenet.LogRegLshModel(input_dim, embedding_dim, num_planes, num_models, class_embedding_table)
@@ -86,7 +86,7 @@ for id in hop2:
     total_samples+=num_samples
     total_1_hit+=top_1_hit
     total_5_hit+=top_5_hit
-print('2 hop accuracy. top 1 hit: {}/{}={}; top 5 hit {}/{}={}'.format(total_1_hit, total_samples,
+    print('Until Now. top 1 hit: {}/{}={}; top 5 hit {}/{}={}'.format(total_1_hit, total_samples,
                                                                        total_1_hit/total_samples,
                                                                        top_5_hit,total_samples,
                                                                        top_5_hit/total_samples))
