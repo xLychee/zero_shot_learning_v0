@@ -18,7 +18,7 @@ class LogRegLshModel:
         self.class_embedding_table = class_embedding_table
         self.models = []
         self.lshs = []
-        for _ in range(len(num_models)):
+        for _ in range(num_models):
             self.lshs.append(mylsh.LSH(input_dim,num_planes))
             self.models.append(self._build_model(input_dim, 2**num_planes))
 
@@ -41,7 +41,7 @@ class LogRegLshModel:
     def predict_top_K(self, test_X, K):
         num_samples = test_X.shape[0]
         outputs = []
-        for i in self.num_models:
+        for i in range(self.num_models):
             model = self.models[i]
             outputs.append(model.predict(test_X))
         predict_Y = []
