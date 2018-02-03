@@ -22,8 +22,9 @@ for i in range(len(netIDs)):
 input_dim = 2048
 num_planes = 5
 num_models = 10
+embedding_dim = 500
 
-model = model_imagenet.LogRegLshModel(input_dim, num_planes, num_models, class_embedding_table)
+model = model_imagenet.LogRegLshModel(input_dim, embedding_dim, num_planes, num_models, class_embedding_table)
 
 # build training set
 '''

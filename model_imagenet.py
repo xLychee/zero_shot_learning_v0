@@ -11,7 +11,7 @@ from keras.regularizers import L1L2
 
 
 class LogRegLshModel:
-    def __init__(self, input_dim, num_planes, num_models, class_embedding_table):
+    def __init__(self, input_dim, embedding_dim, num_planes, num_models, class_embedding_table):
         assert input_dim == 2048
         self.num_models = num_models
         self.output_dim = 2**num_planes
@@ -19,7 +19,7 @@ class LogRegLshModel:
         self.models = []
         self.lshs = []
         for _ in range(num_models):
-            self.lshs.append(mylsh.LSH(input_dim,num_planes))
+            self.lshs.append(mylsh.LSH(embedding_dim,num_planes))
             self.models.append(self._build_model(input_dim, 2**num_planes))
 
     def train(self, X, y):
