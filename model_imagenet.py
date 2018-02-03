@@ -8,7 +8,7 @@ from keras.models import Sequential
 from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten, BatchNormalization, Activation
 from keras.utils import np_utils
 from keras.regularizers import L1L2
-
+from sklearn.model_selection import train_test_split
 
 class LogRegLshModel:
     def __init__(self, input_dim, embedding_dim, num_planes, num_models, class_embedding_table):
@@ -36,7 +36,8 @@ class LogRegLshModel:
             y_index = np.array(y_index)
             dummy_y = np_utils.to_categorical(y_index, num_classes=self.output_dim)
             print('Training for model {}/{}'.format(i+1, self.num_models))
-            model.fit(X, dummy_y, batch_size=128, epochs=5)
+            train_X, vali_X, train_y, vali_y = train_test_split(X, dummy_y, test_size=0.05)
+            model.fit(train_X, train_y, batch_size=128, epochs=5, validation_data = (vali_X, vali_y))
 
     def predict_top_K(self, test_X, K):
         num_samples = test_X.shape[0]
