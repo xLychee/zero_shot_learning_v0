@@ -40,6 +40,23 @@ class LogRegLshModel:
             train_X, vali_X, train_y, vali_y = train_test_split(X, dummy_y, test_size=0.05)
             model.fit(train_X, train_y, batch_size=1024, epochs=1, validation_data = (vali_X, vali_y))
 
+    def _process_individual_sample(self, i, outputs, K):
+        print(i)
+        class_value_table = {}
+        for c in self.class_embedding_table.keys():
+            embedding = self.class_embedding_table[c]
+            value = 0
+            for j in range(self.num_models):
+                index = self.lshs[j].indexing(embedding)
+                value += outputs[j][i][index]
+            class_value_table[c] = value
+        predict_y = []
+        for c in sorted(class_value_table, key=class_value_table.get, reverse=True):
+            predict_y.append(c)
+            if len(predict_y) == K:
+                break
+        return predict_y
+
     def predict_top_K(self, test_X, K):
         num_samples = test_X.shape[0]
         outputs = []
@@ -48,28 +65,19 @@ class LogRegLshModel:
             outputs.append(model.predict(test_X))
             print('model {} prediction'.format(i))
         #predict_Y = []
-        def process_sample(i):
-            print(i)
-            class_value_table = {}
-            for c in self.class_embedding_table.keys():
-                embedding = self.class_embedding_table[c]
-                value = 0
-                for j in range(self.num_models):
-                    index = self.lshs[j].indexing(embedding)
-                    value += outputs[j][i][index]
-                class_value_table[c] = value
-            predict_y = []
-            for c in sorted(class_value_table, key=class_value_table.get, reverse=True):
-                predict_y.append(c)
-                if len(predict_y) == K:
-                    break
-            return predict_y
 
-        predict_Y = []
-        with concurrent.futures.ProcessPoolExecutor() as executor:
-            for i, predict_i in zip(range(num_samples), executor.map(process_sample, range(num_samples))):
-                predict_Y.append(predict_i)
+        predict_Y = [None for i in range(num_samples)]
+        with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+            future_to_index = {executor.submit(self._process_individual_sample, i, outputs, K): i for i in range(num_samples)}
+            for future in concurrent.futures.as_completed(future_to_index):
+                ind = future_to_index[future]
+                predict_Y[ind] = future.result()
+                print(ind)
         '''
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            for i, predict_i in zip(range(num_samples), executor.map(self.predict_top_K(), range(num_samples))):
+                predict_Y.append(predict_i)
+        
         predict_Y = list(map(process_sample, range(num_samples)))
         
         predict_Y = []
