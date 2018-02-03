@@ -9,6 +9,7 @@ from keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten, BatchNor
 from keras.utils import np_utils
 from keras.regularizers import L1L2
 from sklearn.model_selection import train_test_split
+import concurrent.futures
 
 class LogRegLshModel:
     def __init__(self, input_dim, embedding_dim, num_planes, num_models, class_embedding_table):
@@ -47,10 +48,9 @@ class LogRegLshModel:
             outputs.append(model.predict(test_X))
             print('model {} prediction'.format(i))
         #predict_Y = []
-        '''
         def process_sample(i):
+            print(i)
             class_value_table = {}
-            
             for c in self.class_embedding_table.keys():
                 embedding = self.class_embedding_table[c]
                 value = 0
@@ -64,8 +64,14 @@ class LogRegLshModel:
                 if len(predict_y) == K:
                     break
             return predict_y
-        predict_Y = list(map(process_sample, range(num_samples)))
+
+        predict_Y = []
+        with concurrent.futures.ProcessPoolExecutor() as executor:
+            for i, predict_i in zip(range(num_samples), executor.map(process_sample, range(num_samples))):
+                predict_Y.append(predict_i)
         '''
+        predict_Y = list(map(process_sample, range(num_samples)))
+        
         predict_Y = []
         for i in range(num_samples):
             class_value_table = {}
@@ -77,7 +83,7 @@ class LogRegLshModel:
                     value += outputs[j][i][index]
                 return (c, value)
             value_tuples = [cal_value_for_class(c) for c in self.class_embedding_table.keys()]
-            '''
+            
             for c in self.class_embedding_table.keys():
                 embedding = self.class_embedding_table[c]
                 value = 0
@@ -89,7 +95,7 @@ class LogRegLshModel:
                 predict_y.append(c)
                 if len(predict_y) == K:
                     break
-            '''
+            
             predict_y = []
             for t in sorted(value_tuples, key = lambda x:x[1]):
                 predict_y.append(t[0])
@@ -97,6 +103,7 @@ class LogRegLshModel:
                     break
             print(i)
             predict_Y.append(predict_y)
+        '''
         return predict_Y
 
 
