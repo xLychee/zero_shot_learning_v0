@@ -12,6 +12,24 @@ from sklearn.model_selection import train_test_split
 import concurrent.futures
 import copy
 
+
+def _process_individual_sample(self, i, lshs, num_models, class_embedding_table, outputs, K):
+    print('begin', i)
+    class_value_table = {}
+    for c in class_embedding_table.keys():
+        embedding = class_embedding_table[c]
+        value = 0
+        for j in range(num_models):
+            index = lshs[j].indexing(embedding)
+            value += outputs[j][i][index]
+        class_value_table[c] = value
+    predict_y = []
+    for c in sorted(class_value_table, key=class_value_table.get, reverse=True):
+        predict_y.append(c)
+        if len(predict_y) == K:
+            break
+    return predict_y
+
 class LogRegLshModel:
     def __init__(self, input_dim, embedding_dim, num_planes, num_models, class_embedding_table):
         assert input_dim == 2048
@@ -41,25 +59,6 @@ class LogRegLshModel:
             train_X, vali_X, train_y, vali_y = train_test_split(X, dummy_y, test_size=0.05)
             model.fit(train_X, train_y, batch_size=1024, epochs=1, validation_data = (vali_X, vali_y))
 
-    def _process_individual_sample(self, i, outputs, K):
-        print('begin',i)
-        lshs = copy.deepcopy(self.lshs)
-        class_value_table = {}
-        class_embedding_table = copy.deepcopy(self.class_embedding_table)
-        for c in class_embedding_table.keys():
-            embedding = class_embedding_table[c]
-            value = 0
-            for j in range(self.num_models):
-                index = lshs[j].indexing(embedding)
-                value += outputs[j][i][index]
-            class_value_table[c] = value
-        predict_y = []
-        for c in sorted(class_value_table, key=class_value_table.get, reverse=True):
-            predict_y.append(c)
-            if len(predict_y) == K:
-                break
-        return predict_y
-
     def predict_top_K(self, test_X, K):
         num_samples = test_X.shape[0]
         outputs = []
@@ -71,7 +70,7 @@ class LogRegLshModel:
 
         predict_Y = [None for i in range(num_samples)]
         with concurrent.futures.ProcessPoolExecutor(max_workers=50) as executor:
-            future_to_index = {executor.submit(self._process_individual_sample, i, copy.deepcopy(outputs), K): i for i in range(num_samples)}
+            future_to_index = {executor.submit(_process_individual_sample, i, copy.deepcopy(self.lshs), self.num_models, copy.deepcopy(self.class_embedding_table), copy.deepcopy(outputs), K): i for i in range(num_samples)}
             for future in concurrent.futures.as_completed(future_to_index):
                 ind = future_to_index[future]
                 predict_Y[ind] = future.result()
