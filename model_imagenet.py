@@ -10,6 +10,7 @@ from keras.utils import np_utils
 from keras.regularizers import L1L2
 from sklearn.model_selection import train_test_split
 import concurrent.futures
+import copy
 
 class LogRegLshModel:
     def __init__(self, input_dim, embedding_dim, num_planes, num_models, class_embedding_table):
@@ -42,12 +43,14 @@ class LogRegLshModel:
 
     def _process_individual_sample(self, i, outputs, K):
         print(i)
+        lshs = copy.deepcopy(self.lshs)
         class_value_table = {}
-        for c in self.class_embedding_table.keys():
-            embedding = self.class_embedding_table[c]
+        class_embedding_table = copy.deepcopy(self.class_embedding_table)
+        for c in class_embedding_table.keys():
+            embedding = class_embedding_table[c]
             value = 0
             for j in range(self.num_models):
-                index = self.lshs[j].indexing(embedding)
+                index = lshs[j].indexing(embedding)
                 value += outputs[j][i][index]
             class_value_table[c] = value
         predict_y = []
@@ -68,7 +71,7 @@ class LogRegLshModel:
 
         predict_Y = [None for i in range(num_samples)]
         with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-            future_to_index = {executor.submit(self._process_individual_sample, i, outputs, K): i for i in range(num_samples)}
+            future_to_index = {executor.submit(self._process_individual_sample, i, copy.deepcopy(outputs), K): i for i in range(num_samples)}
             for future in concurrent.futures.as_completed(future_to_index):
                 ind = future_to_index[future]
                 predict_Y[ind] = future.result()
