@@ -62,8 +62,20 @@ class LogRegLshModel:
             predict_Y.append(predict_y)
         return predict_Y
 
-
-
+    def _build_model(self, input_dim, output_dim):
+        model = Sequential()
+        model.add(Dense(500,
+                        activation='relu',
+                        kernel_regularizer=L1L2(l1=0.0, l2=0.01),
+                        input_dim=input_dim))
+        model.add(Dense(output_dim,
+                        activation='softmax',
+                        kernel_regularizer=L1L2(l1=0.0, l2=0.01)))
+        model.compile(optimizer='sgd',
+                      loss='categorical_crossentropy',
+                      metrics=['accuracy'])
+        return model
+'''
     def _build_model(self, input_dim, output_dim):
         model = Sequential()
         model.add(Dense(output_dim,
@@ -74,4 +86,4 @@ class LogRegLshModel:
                       loss='categorical_crossentropy',
                       metrics=['accuracy'])
         return model
-
+'''
