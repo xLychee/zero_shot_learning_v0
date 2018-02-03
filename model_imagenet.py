@@ -47,8 +47,10 @@ class LogRegLshModel:
             outputs.append(model.predict(test_X))
             print('model {} prediction'.format(i))
         #predict_Y = []
+        '''
         def process_sample(i):
             class_value_table = {}
+            
             for c in self.class_embedding_table.keys():
                 embedding = self.class_embedding_table[c]
                 value = 0
@@ -64,8 +66,18 @@ class LogRegLshModel:
             return predict_y
         predict_Y = list(map(process_sample, range(num_samples)))
         '''
+        predict_Y = []
         for i in range(num_samples):
             class_value_table = {}
+            def cal_value_for_class(c):
+                embedding = self.class_embedding_table[c]
+                value = 0
+                for j in range(self.num_models):
+                    index = self.lshs[j].indexing(embedding)
+                    value += outputs[j][i][index]
+                return (c, value)
+            value_tuples = [cal_value_for_class(c) for c in self.class_embedding_table.keys()]
+            '''
             for c in self.class_embedding_table.keys():
                 embedding = self.class_embedding_table[c]
                 value = 0
@@ -73,15 +85,18 @@ class LogRegLshModel:
                     index = self.lshs[j].indexing(embedding)
                     value += outputs[j][i][index]
                 class_value_table[c]=value
-            predict_y = []
             for c in sorted(class_value_table, key=class_value_table.get, reverse=True):
                 predict_y.append(c)
                 if len(predict_y) == K:
                     break
+            '''
+            predict_y = []
+            for t in sorted(value_tuples, key = lambda x:x[1]):
+                predict_y.append(t[0])
+                if len(predict_y) == K:
+                    break
             print(i)
             predict_Y.append(predict_y)
-        return predict_Y
-        '''
         return predict_Y
 
 
