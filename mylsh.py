@@ -1,9 +1,9 @@
 import numpy as np
 
 class LSH:
-    def __init__(self, input_dim, output_dim):
+    def __init__(self, input_dim, num_planes):
         self.planes = []
-        for _ in range(output_dim):
+        for _ in range(num_planes):
             x = np.random.randn(input_dim)
             x = x/np.linalg.norm(x)
             self.planes.append(x)
