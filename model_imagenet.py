@@ -46,7 +46,24 @@ class LogRegLshModel:
             model = self.models[i]
             outputs.append(model.predict(test_X))
             print('model {} prediction'.format(i))
-        predict_Y = []
+        #predict_Y = []
+        def process_sample(i):
+            class_value_table = {}
+            for c in self.class_embedding_table.keys():
+                embedding = self.class_embedding_table[c]
+                value = 0
+                for j in range(self.num_models):
+                    index = self.lshs[j].indexing(embedding)
+                    value += outputs[j][i][index]
+                class_value_table[c] = value
+            predict_y = []
+            for c in sorted(class_value_table, key=class_value_table.get, reverse=True):
+                predict_y.append(c)
+                if len(predict_y) == K:
+                    break
+            return predict_y
+        predict_Y = [process_sample(i) for i in range(num_samples)]
+        '''
         for i in range(num_samples):
             class_value_table = {}
             for c in self.class_embedding_table.keys():
@@ -64,6 +81,9 @@ class LogRegLshModel:
             print(i)
             predict_Y.append(predict_y)
         return predict_Y
+        '''
+        return predict_Y
+
 
     def _build_model(self, input_dim, output_dim):
         model = Sequential()
