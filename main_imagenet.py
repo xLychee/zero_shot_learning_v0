@@ -4,7 +4,7 @@ import model_imagenet
 
 import os
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
-os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 file = open('/home/xunluan/zero_shot/datasets/imageNet/wnids.txt')
 netIDs = []
