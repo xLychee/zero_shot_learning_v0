@@ -13,7 +13,7 @@ import concurrent.futures
 import copy
 
 
-def _process_individual_sample(self, i, lshs, num_models, class_embedding_table, outputs, K):
+def _process_individual_sample(i, lshs, num_models, class_embedding_table, outputs, K):
     print('begin', i)
     class_value_table = {}
     for c in class_embedding_table.keys():
