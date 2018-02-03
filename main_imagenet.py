@@ -67,6 +67,7 @@ for id in hop2:
         test_y.append(id)
     print('File Readed {}'.format(id))
     test_X = np.array(test_X)
+    print(test_X.shape)
     top_5_hit = 0
     top_1_hit = 0
     num_samples = test_X.shape[0]

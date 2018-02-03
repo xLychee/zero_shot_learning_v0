@@ -45,6 +45,7 @@ class LogRegLshModel:
         for i in range(self.num_models):
             model = self.models[i]
             outputs.append(model.predict(test_X))
+            print('model {} prediction'.format(i))
         predict_Y = []
         for i in range(num_samples):
             class_value_table = {}
@@ -60,6 +61,7 @@ class LogRegLshModel:
                 predict_y.append(c)
                 if len(predict_y) == K:
                     break
+            print(i)
             predict_Y.append(predict_y)
         return predict_Y
 
