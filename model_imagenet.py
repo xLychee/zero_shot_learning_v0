@@ -37,7 +37,7 @@ class LogRegLshModel:
             dummy_y = np_utils.to_categorical(y_index, num_classes=self.output_dim)
             print('Training for model {}/{}'.format(i+1, self.num_models))
             train_X, vali_X, train_y, vali_y = train_test_split(X, dummy_y, test_size=0.05)
-            model.fit(train_X, train_y, batch_size=128, epochs=1, validation_data = (vali_X, vali_y))
+            model.fit(train_X, train_y, batch_size=1024, epochs=1, validation_data = (vali_X, vali_y))
 
     def predict_top_K(self, test_X, K):
         num_samples = test_X.shape[0]

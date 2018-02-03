@@ -48,10 +48,18 @@ model.train(train_X,train_y)
 # begin prediction:
 home_dir = r'/home/tharun/zmach/2hop/'
 hop2 = netIDs[1000:2549]
+
+total_samples = 0
+total_1_hit = 0
+total_5_hit = 0
 for id in hop2:
     test_X = []
     test_y = []
-    f = open(home_dir+id+'.txt')
+    try:
+        f = open(home_dir + id + '.txt')
+    except IOError:
+        print('file {}.txt not exist'.format(id))
+        continue
     for line in f.readlines():
         tx = [float(i) for i in line.split()]
         test_X.append(tx)
@@ -71,6 +79,14 @@ for id in hop2:
                                                                   top_5_hit, num_samples,
                                                                   top_5_hit/num_samples
                                                                   ))
+    total_samples+=num_samples
+    total_1_hit+=top_1_hit
+    total_5_hit+=top_5_hit
+print('2 hop accuracy. top 1 hit: {}/{}={}; top 5 hit {}/{}={}'.format(total_1_hit, total_samples,
+                                                                       total_1_hit/total_samples,
+                                                                       top_5_hit,total_samples,
+                                                                       top_5_hit/total_samples))
+
 
 
 train_X = np.array(train_X)
