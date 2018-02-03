@@ -69,8 +69,8 @@ class LogRegLshModel:
         #predict_Y = []
 
         predict_Y = [None for i in range(num_samples)]
-        with concurrent.futures.ProcessPoolExecutor(max_workers=50) as executor:
-            future_to_index = {executor.submit(_process_individual_sample, i, copy.deepcopy(self.lshs), self.num_models, copy.deepcopy(self.class_embedding_table), copy.deepcopy(outputs), K): i for i in range(num_samples)}
+        with concurrent.futures.ProcessPoolExecutor(max_workers=10) as executor:
+            future_to_index = {executor.submit(_process_individual_sample, i, self.lshs, self.num_models, self.class_embedding_table, outputs, K): i for i in range(num_samples)}
             for future in concurrent.futures.as_completed(future_to_index):
                 ind = future_to_index[future]
                 predict_Y[ind] = future.result()
