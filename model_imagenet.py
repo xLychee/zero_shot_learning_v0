@@ -67,11 +67,11 @@ class LogRegLshModel:
         model = Sequential()
         model.add(Dense(500,
                         activation='relu',
-                        kernel_regularizer=L1L2(l1=0.0, l2=0.005),
+                        kernel_regularizer=L1L2(l1=0.0, l2=0.002),
                         input_dim=input_dim))
         model.add(Dense(output_dim,
                         activation='softmax',
-                        kernel_regularizer=L1L2(l1=0.0, l2=0.005)))
+                        kernel_regularizer=L1L2(l1=0.0, l2=0.002)))
         model.compile(optimizer='sgd',
                       loss='categorical_crossentropy',
                       metrics=['accuracy'])
