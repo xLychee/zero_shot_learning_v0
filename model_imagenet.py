@@ -22,18 +22,20 @@ class LogRegLshModel:
             self.lshs.append(mylsh.LSH(input_dim,num_planes))
             self.models.append(self._build_model(input_dim, 2**num_planes))
 
-    def train(self, X, y_embedding):
+    def train(self, X, y):
         num_samples = X.shape[0]
         for i in range(self.num_models):
             lsh = self.lshs[i]
             model = self.models[i]
             y_index = []
             for j in range(num_samples):
-                embedding = y_embedding[j]
+                y_label = str(y[j])
+                embedding = self.class_embedding_table[y_label]
                 index = lsh.indexing(embedding)
                 y_index.append(index)
             y_index = np.array(y_index)
             dummy_y = np_utils.to_categorical(y_index, num_classes=self.output_dim)
+            print('Training for model {}/{}'.format(i+1, self.num_models))
             model.fit(X, dummy_y, batch_size=128, epochs=5)
 
     def predict_top_K(self, test_X, K):
