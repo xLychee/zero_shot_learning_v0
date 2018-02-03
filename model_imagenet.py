@@ -62,7 +62,7 @@ class LogRegLshModel:
                 if len(predict_y) == K:
                     break
             return predict_y
-        predict_Y = map(process_sample, range(num_samples))
+        predict_Y = list(map(process_sample, range(num_samples)))
         '''
         for i in range(num_samples):
             class_value_table = {}
