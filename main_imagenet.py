@@ -21,7 +21,7 @@ for i in range(len(netIDs)):
 
 input_dim = 2048
 num_planes = 5
-num_models = 10
+num_models = 1
 embedding_dim = 500
 
 model = model_imagenet.LogRegLshModel(input_dim, embedding_dim, num_planes, num_models, class_embedding_table)
@@ -48,7 +48,32 @@ model.train(train_X,train_y)
 # begin prediction:
 home_dir = r'/home/tharun/zmach/2hop/'
 hop2 = netIDs[1000:2549]
+for id in hop2:
+    test_X = []
+    test_y = []
+    f = open(home_dir+id+'.txt')
+    for line in f.readlines():
+        tx = [float(i) for i in line.split()]
+        test_X.append(tx)
+        test_y.append(id)
+    test_X = np.array(test_X)
+    top_5_hit = 0
+    top_1_hit = 0
+    num_samples = test_X.shape[0]
+    predictions = model.predict_top_K(test_X, 5)
+    for i in range(num_samples):
+        if test_y[i] == predictions[i][0]:
+            top_1_hit+=1
+        if test_y[i] in predictions[i]:
+            top_5_hit+=1
+    print('Class id: {}; 1 hit: {}/{}={}; 5 hit: {}/{}={}'.format(id, top_1_hit, num_samples,
+                                                                  top_1_hit/num_samples,
+                                                                  top_5_hit, num_samples,
+                                                                  top_5_hit/num_samples
+                                                                  ))
 
+
+train_X = np.array(train_X)
 
 
 hop3 = netIDs[2549:8860]
