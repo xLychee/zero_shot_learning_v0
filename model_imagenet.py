@@ -42,7 +42,7 @@ class LogRegLshModel:
             model.fit(train_X, train_y, batch_size=1024, epochs=1, validation_data = (vali_X, vali_y))
 
     def _process_individual_sample(self, i, outputs, K):
-        print(i)
+        print('begin',i)
         lshs = copy.deepcopy(self.lshs)
         class_value_table = {}
         class_embedding_table = copy.deepcopy(self.class_embedding_table)
@@ -70,12 +70,12 @@ class LogRegLshModel:
         #predict_Y = []
 
         predict_Y = [None for i in range(num_samples)]
-        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
             future_to_index = {executor.submit(self._process_individual_sample, i, copy.deepcopy(outputs), K): i for i in range(num_samples)}
             for future in concurrent.futures.as_completed(future_to_index):
                 ind = future_to_index[future]
                 predict_Y[ind] = future.result()
-                print(ind)
+                print('finish',ind)
         '''
         with concurrent.futures.ThreadPoolExecutor() as executor:
             for i, predict_i in zip(range(num_samples), executor.map(self.predict_top_K(), range(num_samples))):
