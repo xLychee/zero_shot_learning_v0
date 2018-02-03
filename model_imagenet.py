@@ -70,7 +70,7 @@ class LogRegLshModel:
         #predict_Y = []
 
         predict_Y = [None for i in range(num_samples)]
-        with concurrent.futures.ThreadPoolExecutor(max_workers=50) as executor:
+        with concurrent.futures.ProcessPoolExecutor(max_workers=50) as executor:
             future_to_index = {executor.submit(self._process_individual_sample, i, copy.deepcopy(outputs), K): i for i in range(num_samples)}
             for future in concurrent.futures.as_completed(future_to_index):
                 ind = future_to_index[future]
