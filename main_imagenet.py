@@ -1,6 +1,6 @@
 import numpy as np
 import model_imagenet
-
+import pickle
 
 import os
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
@@ -45,6 +45,11 @@ train_X = np.load('/home/xunluan/zero_shot/datasets/imageNet/train_X.npy')
 train_y = np.load('/home/xunluan/zero_shot/datasets/imageNet/train_y.npy')
 model.train(train_X,train_y)
 print('Training Completed')
+
+model_file = open('model.save', 'w')
+pickle.dump(model, model_file)
+print('model saved')
+
 # begin prediction:
 home_dir = r'/home/tharun/zmach/2hop/'
 hop2 = netIDs[1000:2549]
