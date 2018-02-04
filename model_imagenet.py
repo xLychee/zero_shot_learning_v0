@@ -26,7 +26,7 @@ def _process_individual_sample(i, lshs, num_models, class_embedding_table, outpu
     predict_y = []
     for c in sorted(class_value_table, key=class_value_table.get, reverse=True):
         predict_y.append(c)
-        print(c, class_value_table[c])
+        #print(c, class_value_table[c])
         if len(predict_y) == K:
             break
     return predict_y
@@ -58,7 +58,7 @@ class LogRegLshModel:
             dummy_y = np_utils.to_categorical(y_index, num_classes=self.output_dim)
             print('Training for model {}/{}'.format(i+1, self.num_models))
             train_X, vali_X, train_y, vali_y = train_test_split(X, dummy_y, test_size=0.02)
-            model.fit(train_X, train_y, batch_size=512, epochs=1, validation_data = (vali_X, vali_y))
+            model.fit(train_X, train_y, batch_size=256, epochs=10, validation_data = (vali_X, vali_y))
 
     def predict_top_K(self, test_X, K):
         num_samples = test_X.shape[0]
