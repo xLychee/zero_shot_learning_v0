@@ -26,6 +26,7 @@ def _process_individual_sample(i, lshs, num_models, class_embedding_table, outpu
     predict_y = []
     for c in sorted(class_value_table, key=class_value_table.get, reverse=True):
         predict_y.append(c)
+        print(c, class_value_table[c])
         if len(predict_y) == K:
             break
     return predict_y
