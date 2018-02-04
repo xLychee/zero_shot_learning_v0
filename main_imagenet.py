@@ -71,7 +71,7 @@ for id in hop2:
     top_5_hit = 0
     top_1_hit = 0
     num_samples = test_X.shape[0]
-    predictions = model.predict_top_K(test_X, 5)
+    predictions = model.predict_top_K(test_X, 5, id)
     print('Prediction completed')
     for i in range(num_samples):
         if test_y[i] == predictions[i][0]:

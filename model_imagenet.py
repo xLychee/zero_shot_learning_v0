@@ -24,9 +24,10 @@ def _process_individual_sample(i, lshs, num_models, class_embedding_table, outpu
             value += outputs[j][i][index]
         class_value_table[c] = value
     predict_y = []
+    print('True class: {}; Value: {}'.format(id, class_value_table[id]))
     for c in sorted(class_value_table, key=class_value_table.get, reverse=True):
         predict_y.append(c)
-        #print(c, class_value_table[c])
+        print("  ", c, class_value_table[c])
         if len(predict_y) == K:
             break
     return predict_y
@@ -60,7 +61,7 @@ class LogRegLshModel:
             train_X, vali_X, train_y, vali_y = train_test_split(X, dummy_y, test_size=0.02)
             model.fit(train_X, train_y, batch_size=256, epochs=10, validation_data = (vali_X, vali_y))
 
-    def predict_top_K(self, test_X, K):
+    def predict_top_K(self, test_X, K, id):
         num_samples = test_X.shape[0]
         outputs = []
         for i in range(self.num_models):
@@ -71,7 +72,7 @@ class LogRegLshModel:
 
         predict_Y = [None for i in range(num_samples)]
         with concurrent.futures.ProcessPoolExecutor() as executor:
-            future_to_index = {executor.submit(_process_individual_sample, i, self.lshs, self.num_models, self.class_embedding_table, outputs, K): i for i in range(num_samples)}
+            future_to_index = {executor.submit(_process_individual_sample, i, self.lshs, self.num_models, self.class_embedding_table, outputs, K, id): i for i in range(num_samples)}
             for future in concurrent.futures.as_completed(future_to_index):
                 ind = future_to_index[future]
                 predict_Y[ind] = future.result()
