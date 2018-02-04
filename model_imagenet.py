@@ -74,7 +74,7 @@ class LogRegLshModel:
             for future in concurrent.futures.as_completed(future_to_index):
                 ind = future_to_index[future]
                 predict_Y[ind] = future.result()
-                print('finish',ind)
+                #print('finish',ind)
         '''
         with concurrent.futures.ThreadPoolExecutor() as executor:
             for i, predict_i in zip(range(num_samples), executor.map(self.predict_top_K(), range(num_samples))):
