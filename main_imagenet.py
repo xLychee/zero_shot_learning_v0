@@ -46,9 +46,13 @@ train_y = np.load('/home/xunluan/zero_shot/datasets/imageNet/train_y.npy')
 model.train(train_X,train_y)
 print('Training Completed')
 
-model_file = open('model.save', 'w')
-pickle.dump(model, model_file)
-print('model saved')
+#model_file = open('model.save', 'w')
+#pickle.dump(model, model_file)
+#print('model saved')
+
+result_file = open('result.txt','w')
+import sys
+sys.stdout = result_file
 
 # begin prediction:
 home_dir = r'/home/tharun/zmach/2hop/'
@@ -103,3 +107,4 @@ train_X = np.array(train_X)
 
 hop3 = netIDs[2549:8860]
 rest = netIDs[8860:]
+result_file.close()
