@@ -20,8 +20,8 @@ for i in range(len(netIDs)):
     class_embedding_table[netIDs[i]] = w2v[i]
 
 input_dim = 2048
-num_planes = 2
-num_models = 20
+num_planes = 3
+num_models = 40
 embedding_dim = 500
 
 model = model_imagenet.LogRegLshModel(input_dim, embedding_dim, num_planes, num_models, class_embedding_table)
@@ -97,8 +97,8 @@ for id in hop2:
     total_5_hit+=top_5_hit
     print('Until Now. top 1 hit: {}/{}={}; top 5 hit {}/{}={}'.format(total_1_hit, total_samples,
                                                                        total_1_hit/total_samples,
-                                                                       top_5_hit,total_samples,
-                                                                       top_5_hit/total_samples))
+                                                                      total_5_hit,total_samples,
+                                                                      total_5_hit/total_samples))
 
 
 
