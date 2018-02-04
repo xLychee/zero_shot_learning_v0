@@ -20,7 +20,7 @@ for i in range(len(netIDs)):
     class_embedding_table[netIDs[i]] = w2v[i]
 
 input_dim = 2048
-num_planes = 5
+num_planes = 2
 num_models = 20
 embedding_dim = 500
 
