@@ -37,6 +37,7 @@ class_embedding_table = {}
 
 for i in range(len(netIDs)):
     class_embedding_table[netIDs[i]] = unigram_embedding[i].toarray().flatten()
+    print(i, netIDs[i])
 
 input_dim = 2048
 num_planes = 3
