@@ -36,7 +36,7 @@ assert len(netIDs) == unigram_embedding.shape[0]
 class_embedding_table = {}
 
 for i in range(len(netIDs)):
-    class_embedding_table[netIDs[i]] = unigram_embedding[i]
+    class_embedding_table[netIDs[i]] = unigram_embedding[i].toarray().flatten()
 
 input_dim = 2048
 num_planes = 3
@@ -60,6 +60,8 @@ for id in top1000:
         train_y.append(id)
 train_X = np.array(train_X)
 '''
+
+print('Begin Training')
 train_X = np.load('/home/xunluan/zero_shot/datasets/imageNet/train_X.npy')
 train_y = np.load('/home/xunluan/zero_shot/datasets/imageNet/train_y.npy')
 model.train(train_X,train_y)
