@@ -12,7 +12,7 @@ class LSH:
     def indexing(self, input_vec):
         result = 0
         if type(input_vec) == scipy.sparse.csr.csr_matrix:
-            input_vec = input_vec.toarray()
+            input_vec = input_vec.toarray().flatten()
         for x in self.planes:
             if x.dot(input_vec)>=0:
                 result = result * 2 + 1
