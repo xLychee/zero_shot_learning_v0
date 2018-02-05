@@ -9,7 +9,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 result_file = open('result_2.txt','w')
 import sys
-sys.stdout = result_file
+#sys.stdout = result_file
 
 home_dir = r'/home/tharun/zmach/ImageNet_w2v/'
 row_unigram = np.loadtxt(home_dir+'row_unigram.txt',dtype=int,delimiter='\n')
