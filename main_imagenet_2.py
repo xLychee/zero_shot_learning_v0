@@ -17,12 +17,14 @@ col_unigram = np.loadtxt(home_dir+'col_unigram.txt',dtype=int,delimiter='\n')
 data_unigram = np.loadtxt(home_dir+'data_unigram.txt',dtype=int,delimiter='\n')
 
 unigram_embedding = csr_matrix((data_unigram,(row_unigram,col_unigram)))
+print('unigram')
 
 row_bigram = np.loadtxt(home_dir+'row_bigram.txt',dtype=int,delimiter='\n')
 col_bigram = np.loadtxt(home_dir+'col_bigram.txt',dtype=int,delimiter='\n')
 data_bigram = np.loadtxt(home_dir+'data_bigram.txt',dtype=int,delimiter='\n')
 
 bigram_embedding = csr_matrix((data_bigram,(row_bigram,col_bigram)))
+print('bigram')
 
 file = open('/home/xunluan/zero_shot/datasets/imageNet/wnids.txt')
 netIDs = []
