@@ -1,5 +1,5 @@
 import numpy as np
-import model_imagenet
+import model_imagenet_minhash
 import pickle
 from scipy.sparse import csr_matrix
 
@@ -40,14 +40,14 @@ class_embedding_table = {}
 
 for i in range(len(netIDs)):
     class_embedding_table[netIDs[i]] = unigram_embedding[i]
-    print(i, netIDs[i])
+    #print(i, netIDs[i])
 
 input_dim = 2048
 num_planes = 3
 num_models = 20
 embedding_dim = unigram_embedding.shape[1]
 
-model = model_imagenet.LogRegLshModel(input_dim, embedding_dim, num_planes, num_models, class_embedding_table)
+model = model_imagenet_minhash.MinHashRegressionModel(input_dim, embedding_dim, num_planes, num_models, class_embedding_table)
 
 # build training set
 '''

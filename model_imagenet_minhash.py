@@ -33,7 +33,7 @@ def _process_individual_sample(i, lshs, num_models, class_embedding_table, outpu
     return predict_y
 
 
-class LogRegLshModel:
+class MinHashRegressionModel:
     def __init__(self, input_dim, embedding_dim, num_planes, num_models, class_embedding_table):
         assert input_dim == 2048
         self.num_models = num_models
