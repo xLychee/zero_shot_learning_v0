@@ -83,6 +83,7 @@ hop2 = netIDs[1000:2549]
 total_samples = 0
 total_1_hit = 0
 total_5_hit = 0
+np.random.shuffle(hop2)
 for id in hop2:
     test_X = []
     test_y = []
