@@ -18,13 +18,14 @@ data_unigram = np.loadtxt(home_dir+'data_unigram.txt',dtype=int,delimiter='\n')
 
 unigram_embedding = csr_matrix((data_unigram,(row_unigram,col_unigram)))
 print('unigram')
-
+'''
 row_bigram = np.loadtxt(home_dir+'row_bigram.txt',dtype=int,delimiter='\n')
 col_bigram = np.loadtxt(home_dir+'col_bigram.txt',dtype=int,delimiter='\n')
 data_bigram = np.loadtxt(home_dir+'data_bigram.txt',dtype=int,delimiter='\n')
 
 bigram_embedding = csr_matrix((data_bigram,(row_bigram,col_bigram)))
 print('bigram')
+'''
 
 file = open('/home/xunluan/zero_shot/datasets/imageNet/wnids.txt')
 netIDs = []
@@ -43,7 +44,7 @@ for i in range(len(netIDs)):
 
 input_dim = 2048
 num_planes = 3
-num_models = 40
+num_models = 20
 embedding_dim = unigram_embedding.shape[1]
 
 model = model_imagenet.LogRegLshModel(input_dim, embedding_dim, num_planes, num_models, class_embedding_table)
