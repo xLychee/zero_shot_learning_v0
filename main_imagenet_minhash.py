@@ -9,23 +9,22 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
 result_file = open('result_2.txt','w')
 import sys
-#sys.stdout = result_file
+sys.stdout = result_file
 
 home_dir = r'/home/tharun/zmach/ImageNet_w2v/'
+'''
 row_unigram = np.loadtxt(home_dir+'row_unigram.txt',dtype=int,delimiter='\n')
 col_unigram = np.loadtxt(home_dir+'col_unigram.txt',dtype=int,delimiter='\n')
 data_unigram = np.loadtxt(home_dir+'data_unigram.txt',dtype=int,delimiter='\n')
-
 unigram_embedding = csr_matrix((data_unigram,(row_unigram,col_unigram)))
-print('unigram')
+print('unigram: {}'.format(unigram_embedding.shape)
 '''
 row_bigram = np.loadtxt(home_dir+'row_bigram.txt',dtype=int,delimiter='\n')
 col_bigram = np.loadtxt(home_dir+'col_bigram.txt',dtype=int,delimiter='\n')
 data_bigram = np.loadtxt(home_dir+'data_bigram.txt',dtype=int,delimiter='\n')
-
 bigram_embedding = csr_matrix((data_bigram,(row_bigram,col_bigram)))
-print('bigram')
-'''
+print('bigram: {}'.format(bigram_embedding.shape))
+
 
 file = open('/home/xunluan/zero_shot/datasets/imageNet/wnids.txt')
 netIDs = []
@@ -35,17 +34,17 @@ for id in file.readlines():
 w2v = np.load('/home/xunluan/zero_shot/datasets/imageNet/w2v.npy')
 assert len(netIDs) == w2v.shape[0]
 '''
-assert len(netIDs) == unigram_embedding.shape[0]
+assert len(netIDs) == bigram_embedding.shape[0]
 class_embedding_table = {}
 
 for i in range(len(netIDs)):
-    class_embedding_table[netIDs[i]] = unigram_embedding[i]
+    class_embedding_table[netIDs[i]] = bigram_embedding[i]
     #print(i, netIDs[i])
 
 input_dim = 2048
 num_planes = 3
 num_models = 20
-embedding_dim = unigram_embedding.shape[1]
+embedding_dim = bigram_embedding.shape[1]
 
 model = model_imagenet_minhash.MinHashRegressionModel(input_dim, embedding_dim, num_planes, num_models, class_embedding_table)
 
