@@ -7,9 +7,6 @@ import os
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 
-result_file = open('result_2.txt','w')
-import sys
-sys.stdout = result_file
 
 home_dir = r'/home/tharun/zmach/ImageNet_w2v/'
 '''
@@ -74,6 +71,10 @@ print('Training Completed')
 #pickle.dump(model, model_file)
 #print('model saved')
 
+
+result_file = open('result_2.txt','w')
+import sys
+sys.stdout = result_file
 
 # begin prediction:
 home_dir = r'/home/tharun/zmach/2hop/'

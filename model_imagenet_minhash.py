@@ -78,7 +78,7 @@ class MinHashRegressionModel:
         # predict_Y = []
 
         predict_Y = [None for i in range(num_samples)]
-        with concurrent.futures.ProcessPoolExecutor(max_workers=5) as executor:
+        with concurrent.futures.ProcessPoolExecutor(max_workers=2) as executor:
             future_to_index = {
             executor.submit(_process_individual_sample, i, self.lshs, self.num_models, self.class_embedding_table,
                             outputs, K, id): i for i in range(num_samples)}
